@@ -3,35 +3,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: postgres
-  name: postgres
+    app: redmine
+  name: redmine
   namespace: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: redmine
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: postgres
+        app: redmine
     spec:
       hostNetwork: true
       containers:
-        - name: postgres
-          image: postgres:10.13-alpine
+        - name: redmine
+          image: redmine:4.1.1-alpine
+          env:
+            - name: REDMINE_DB_POSTGRES
+              value: postgres
           envFrom:
             - secretRef:
-                name: postgres-secret
+                name: redmine-secret
           ports:
-            - containerPort: 5432
-              name: postgres
-          volumeMounts:
-            - name: postgres-pvc
-              mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgres-pvc
-          persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            - containerPort: 3000
+              name: redmine
