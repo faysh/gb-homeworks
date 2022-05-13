@@ -4,7 +4,7 @@ metadata:
   name: postgres-pv-claim
   namespace: postgres
 spec:
-  storageClassName: manual
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
